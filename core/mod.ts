@@ -4,7 +4,7 @@ const TOKEN = Deno.env.get("TOKEN") ?? Deno.exit(-1);
 const ROOM_ID = Deno.env.get("ROOM_ID") ?? Deno.exit(-1);
 const BOT = new SmallBot({
   accessToken: TOKEN,
-  homeserverUrl: "https://github.com/mythal/neuron",
+  homeserverUrl: "https://matrix.org/",
   eventHandler: async (_client, _roomId, _event) => {},
 });
 
