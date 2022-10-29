@@ -1,8 +1,13 @@
-export function add(a: number, b: number): number {
-  return a + b;
-}
+import { SmallBot } from "https://deno.land/x/smallbot_matrix@0.1.2/mod.ts";
 
-// Learn more at https://deno.land/manual/examples/module_metadata#concepts
-if (import.meta.main) {
-  console.log("Add 2 + 3 =", add(2, 3));
+const TOKEN = Deno.env.get("TOKEN") ?? Deno.exit(-1);
+const ROOM_ID = Deno.env.get("ROOM_ID") ?? Deno.exit(-1);
+const BOT = new SmallBot({
+  accessToken: TOKEN,
+  homeserverUrl: "https://github.com/mythal/neuron",
+  eventHandler: async (_client, _roomId, _event) => {},
+});
+
+export async function sendMessage(msg: string): Promise<void> {
+  await BOT.sendMessage(ROOM_ID, "m.text", msg);
 }
