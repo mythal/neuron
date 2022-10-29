@@ -1,5 +1,7 @@
-import { Application, Router } from "https://deno.land/x/oak@v11.1.0/mod.ts";
+import { Application, Context, Router, Status } from "https://deno.land/x/oak@v11.1.0/mod.ts";
 import { sendMessage } from "./core/mod.ts";
+
+const SECRET = Deno.env.get("SECRET") ?? Deno.exit(-1);
 
 const router = new Router();
 router
@@ -11,7 +13,16 @@ router
     context.response.body = "done";
   });
 
+const filter = (context: Context) => {
+  if (context.request.headers.get("SECRET") != SECRET) {
+    context.response.body = "Yyyyy";
+    context.response.status = Status.Forbidden;
+    context.respond = true;
+  }
+}
+
 const app = new Application();
+app.use(filter);
 app.use(router.routes());
 app.use(router.allowedMethods());
 
