@@ -13,16 +13,18 @@ router
     context.response.body = "done";
   });
 
-const filter = (context: Context) => {
+const app = new Application();
+
+app.use(async (context, next) => {
   if (context.request.headers.get("SECRET") != SECRET) {
     context.response.body = "Yyyyy";
     context.response.status = Status.Forbidden;
     context.respond = true;
+  } else {
+    await next();
   }
-}
+});
 
-const app = new Application();
-app.use(filter);
 app.use(router.routes());
 app.use(router.allowedMethods());
 
