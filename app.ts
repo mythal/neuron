@@ -1,5 +1,6 @@
 import { Application, Router, Status } from "https://deno.land/x/oak@v11.1.0/mod.ts";
 import { sendMessage } from "./core/mod.ts";
+import { render } from "./lists.sr.ht/mod.ts";
 
 const router = new Router();
 router
@@ -13,12 +14,16 @@ router
   .post("/webhook/lists", async (context) => {
     const body = context.request.body();
 
-    if (body.type != "json") {
-      context.response.body = "not a valid body";
+    try {
+      const msg = await render(body);
+      await sendMessage(msg);
+    } catch (e) {
+      console.error(e);
+      context.response.body = e;
       context.response.status = Status.BadRequest;
-      return;
+      return 
     }
-    console.log(await body.value);
+
     context.response.body = "done";
   });
 
