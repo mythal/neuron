@@ -1,4 +1,4 @@
-import { Application, Router } from "https://deno.land/x/oak@v11.1.0/mod.ts";
+import { Application, Router, Status } from "https://deno.land/x/oak@v11.1.0/mod.ts";
 import { sendMessage } from "./core/mod.ts";
 
 const router = new Router();
@@ -8,6 +8,17 @@ router
   })
   .get("/ping", async (context) => {
     await sendMessage("pong");
+    context.response.body = "done";
+  })
+  .get("/webhook/lists", (context) => {
+    const body = context.request.body();
+
+    if (body.type != "json") {
+      context.response.body = "not a valid body";
+      context.response.status = Status.BadRequest;
+      return;
+    }
+    console.log(body.value);
     context.response.body = "done";
   });
 
