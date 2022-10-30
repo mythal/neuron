@@ -10,7 +10,7 @@ router
     await sendMessage("pong");
     context.response.body = "done";
   })
-  .post("/webhook/lists", (context) => {
+  .post("/webhook/lists", async (context) => {
     const body = context.request.body();
 
     if (body.type != "json") {
@@ -18,7 +18,7 @@ router
       context.response.status = Status.BadRequest;
       return;
     }
-    console.log(body.value);
+    console.log(await body.value);
     context.response.body = "done";
   });
 
