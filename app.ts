@@ -10,7 +10,7 @@ router
     await sendMessage("pong");
     context.response.body = "done";
   })
-  .get("/webhook/lists", (context) => {
+  .post("/webhook/lists", (context) => {
     const body = context.request.body();
 
     if (body.type != "json") {
